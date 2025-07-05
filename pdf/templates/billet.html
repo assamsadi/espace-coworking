@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Reservation Ticket</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1cm;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .ticket-title {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        .reservation-info {
+            margin-bottom: 20px;
+        }
+        .info-box {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .qr-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .qr-code {
+            width: 150px;
+            height: 150px;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #7f8c8d;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+        .total-amount {
+            font-size: 18px;
+            font-weight: bold;
+            color: #27ae60;
+        }
+    </style>
+</head>
+<body>
+   
+
+    <div class="info-box">
+        <div class="info-row">
+            <span class="info-label">Customer:</span>
+            <span>{{user}} </span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Date:</span>
+            <span>{{ current_time }}</span>
+        </div>
+    </div>
+
+    <div class="reservation-info">
+        <h3>Reservation Details</h3>
+        <div class="info-box">
+            <div class="info-row">
+                <span class="info-label">salle:</span>
+                <span>{{ num_salle }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Duration:</span>
+                <span> {{duee}} Jours</span>
+            </div>
+            
+            {% if equipments_reserve %}
+            <div class="info-row">
+                <span class="info-label">Equipment:</span>
+                {% for equipment_reserve in equipments_reserve %}
+                
+                <span>{{ equipment_reserve.name }} ({{ equipment_reserve.que }})</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            {% if services_reserve %}
+            <div class="info-row">
+                <span class="info-label">Services:</span>
+                <span>{{ services_reserve|join:", " }}</span>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="payment-details">
+        <h3>Payment Summary</h3>
+        <div class="info-box">
+            <div class="info-row">
+                <span class="info-label">Salle Price:</span>
+                <span>{{ prix_salle }} DH</span>
+            </div>
+            {% if prix_equipments %}
+            <div class="info-row">
+                <span class="info-label">Equipment:</span>
+                <span>{{ prix_equipments }} SH</span>
+            </div>
+            {% endif %}
+            {% if prix_reserve %}
+            <div class="info-row">
+                <span class="info-label">Services:</span>
+                <span>{{ prix_reserve }} DH</span>
+            </div>
+            {% endif %}
+            <div class="info-row">
+                <span class="info-label">Subtotal:</span>
+                <span>{{ prix }} DH</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">VAT (38%):</span>
+                <span>{{ tva }} DH</span>
+            </div>
+            <div class="info-row total-amount">
+                <span class="info-label">Total Amount:</span>
+                <span>{{ total }} DH</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="qr-container">
+        <img class="qr-code" src="data:image/png;base64,{{ qr_code }}" alt="Reservation QR Code">
+        <p>Scaner le QR code pour paiement sur Tripe</p>
+    </div>
+
+    <div class="footer">
+        <p>Thank you for your reservation!</p>
+        <p>Generated on {{ current_time }}</p>
+    </div>
+</body>
+</html>

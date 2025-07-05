@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Commande PDF</title>
+    <style>
+        body { font-family: sans-serif; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #000; padding: 8px; text-align: left; }
+        th { background-color: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <h1>Factue de {{ user }}</h1>
+    <h2> salle {{ reservation_obj.num_salle }}</h2>
+    <p>billet  N 
+    : <strong>{{ reservation_obj.num_ticket }}</strong></p>
+    <p>Date de génération : {{ current_date }}</p>
+
+    <h2>Livres commandés</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nom</th>
+                <th>Quantité</th>
+                <th>Prix unitaire DH</th>
+                <th>Prix total DH</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in reservation_obj.equipements %}
+            <tr>
+                 <td>{{ forloop.counter }}</td>
+                <td>{{ book.name }}</td>
+                <td>{{ book.que }}</td>
+                <td>{{ book.prix }}</td>
+                <td>{{ book.prixTotale }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h4>prix des equipment  : {{prix_equipment}} DHS</h4>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nom</th>
+                <th>Quantité</th>
+                <th>Prix unitaire DH</th>
+                <th>Prix total DH</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in reservation_obj.servises %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ book.name }}</td>
+                <td>{{ book.que }}</td>
+                <td>{{ book.prix }}</td>
+                <td>{{ book.prixTotale }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h4>prix des service  : {{prix_services}} DHS</h4>
+    <br>
+
+    <h4> salle  {{ reservation_obj.num_salle }} prix de la salle  : {{prix_salle}} DHS</h4>
+
+
+    <h3>Détail du prix</h3>
+    <p>Total HT : {{ to}} DHS</p>
+    <p>TVA (20%) : {{ prix_tva}} DHS</p>
+    <p><strong>Total TTC : {{ prix }} DHS</strong></p>
+
+    </body>
+</html>

@@ -1,0 +1,71 @@
+{% extends 'main.html' %}
+{% block content %}
+<script src="https://js.stripe.com/v3/"></script>
+
+{% if user.role == "client" %}
+<div class="bg-linear-to-br from-gray-500 to-gray-300  backdrop-blur-md h-screen flex flex-col justify-center items-center">
+    <div class="bg-gradient-to-r  from-sky-500 to-indigo-500 rounded-lg shadow-lg p-8">
+        <h1 class="text-4xl font-bold text-white mb-4">
+          le billet de la reservation de la salle  {{reservation.num_salle}}
+        </h1>
+        <p class="text-lg text-white mb-8">
+           etet de la reservation {{reservation.status}} 
+        </p>
+        <button  id='checkout-button' class="bg-sky-900 hover:bg-gray-200 text-white font-bold py-2 px-4 rounded">
+            pay this commnade
+        </button>
+           <a href={% url "list_reservation" %} class="bg-red-400 hover:bg-gray-200 text-white font-bold py-2 px-4 rounded">
+            cansel
+        </a>
+    </div>
+</div>
+{% else %}
+<div class="bg-linear-to-br from-gray-500 to-gray-300  backdrop-blur-md h-screen flex flex-col justify-center items-center">
+    <div class="bg-gradient-to-r  from-amber-600 to-amber-500 rounded-lg shadow-lg p-8">
+        <h1 class="text-4xl font-bold text-white mb-4">
+          le billet de la reservation de la salle  {{reservation.num_salle}}
+        </h1>
+        <p class="text-lg text-white mb-8">
+           etet de la reservation {{reservation.status}} 
+        </p>
+        <a href = {% url 'to_reserve' reservation.num_salle %}>
+        <button   class="bg-cyan-600 hover:bg-gray-200 text-white font-bold py-2 px-4 rounded">
+            la reservation comanse
+        </button>
+        </a>
+        <a href={% url 'to_done' reservation.num_salle %}>
+        <button  class="bg-cyan-600 hover:bg-gray-200 text-white font-bold py-2 px-4 rounded">
+            la reservation termine
+        </button>
+        </a>
+        <a href={% url "list_page_staff" %} class="bg-red-400 hover:bg-gray-200 text-white font-bold py-2 px-4 rounded">
+            cansel
+        </a>
+    </div>
+</div>
+{% endif %}
+
+    
+    <script>
+        const stripe = Stripe("{{ stripe_publishable_key}}");
+
+        document.getElementById("checkout-button").addEventListener("click", function () {
+
+          v = "{{reservation.prix}}00";
+           const price ="66";
+            fetch("/sripe/create-checkout-session/{{id}}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: v
+            })
+            .then(response => response.json())
+            .then(session => {
+                return stripe.redirectToCheckout({ sessionId: session.id });
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    </script>
+{% endblock %}

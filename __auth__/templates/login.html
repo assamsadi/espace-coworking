@@ -1,0 +1,125 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex">
+  <!-- Left Side - Auth Forms -->
+  <div class="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8">
+    <div class="w-full max-w-md">
+      <div class="bg-white rounded-2xl shadow-xl p-8 sm:p-10 transition-all duration-300 hover:shadow-2xl">
+        <!-- Logo/Brand -->
+        <div class="flex justify-center mb-8">
+          <div class="w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Login Form -->
+        <div id="login">
+          <h2 class="text-3xl font-bold text-center text-gray-800 mb-2">Login</h2>
+          <p class="text-center text-gray-600 mb-8">Please sign in to your account</p>
+          
+          <form  method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+            
+            <!-- Email Field -->
+            <div class="mb-6">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+              <div class="relative">
+                <input 
+                  type="text" 
+                  name="username" 
+                  value= {{user_login.username}} ""
+                  class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all duration-200 placeholder-gray-400"
+                  placeholder="you@example.com"
+                />
+                {% if errors.username %}
+                {{errors.username}}
+                {% endif %}
+                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                  <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Password Field -->
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-2">
+                <label class="block text-sm font-medium text-gray-700">Password</label>
+              </div>
+              <div class="relative">
+                <input 
+                  type="password" 
+                  name="password" 
+                  value= {{user_login.password}} ""
+
+                  class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all duration-200 placeholder-gray-400"
+                  placeholder="••••••••"
+                />
+                 {% if errors.password %}
+                {{errors.password}}
+                {% endif %}
+                <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                  <button type="button" class="text-gray-400 hover:text-gray-600 focus:outline-none">
+                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                      <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+             {% if errors.server %}
+                {{errors.server}}
+                {% endif %}
+            
+            <!-- Submit Button -->
+            <button 
+              type="submit" 
+              class="w-full bg-gradient-to-r from-cyan-600 to-cyan-700 text-white py-3 rounded-lg font-semibold hover:from-cyan-700 hover:to-cyan-800 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 transition-all duration-200 shadow-md hover:shadow-lg"
+            >
+              Sign In
+            </button>
+            
+  
+            
+            <!-- Sign Up Link -->
+            <p class="mt-8 text-center text-gray-600">
+              Don't have an account? 
+              <a href={% url "registerPage"  %}   class="font-medium text-cyan-600 hover:text-cyan-700">Sign up</a>
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Side - Image -->
+  <div class="hidden lg:block lg:w-1/2 bg-cover bg-center" style="background-image: url('/media/photos/logofif.png')">
+    <div class="h-full bg-gradient-to-t from-black/70 via-black/50 to-black/30 flex items-end p-12">
+      <div class="text-white">
+        <h2 class="text-4xl font-bold mb-4">DeepWork</h2>
+        <p class="text-xl opacity-90">travailler jusqu'au dernier battement</p>
+        <div class="mt-6 flex space-x-4">
+          <div class="flex items-center">
+            <svg class="h-5 w-5 text-cyan-400 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+            <span>Secure platform</span>
+          </div>
+          <div class="flex items-center">
+            <svg class="h-5 w-5 text-cyan-400 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+            <span>24/7 Support</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,139 @@
+{% extends 'menu_user.html' %}
+{% block content %}
+<script src="https://js.stripe.com/v3/"></script>
+<div class="sm:flex sm:flex-col sm:align-center p-10">
+   
+    <div
+        class="mt-12 space-y-2 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-6 md:max-w-5xl md:mx-auto xl:grid-cols-2">
+        
+       
+        <div class="border border-slate-200 rounded-lg shadow-sm divide-y divide-slate-200">
+            <div class="p-6">
+                <h2 class="text-xl leading-6 font-bold text-slate-900">Pro</h2>
+                <p class="mt-8">
+                    <span class="text-4xl font-bold text-slate-900 tracking-tighter">250 DHS</span>
+
+                    <span class="text-base font-medium text-slate-500">/mois</span>
+                </p><button  id ="pro-button"
+                    class="mt-8 block w-full bg-cyan-900 rounded-md py-2 text-sm font-semibold text-white text-center">payer</button>
+            </div>
+            <div class="pt-6 pb-8 px-6">
+                <h3 class="text-sm font-bold text-slate-900 tracking-wide uppercase">les offres</h3>
+                <ul role="list" class="mt-4 space-y-3">
+                    
+                    <li class="flex space-x-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 h-5 w-5 text-green-400" width="24"
+                            height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M5 12l5 5l10 -10"></path>
+                        </svg>
+                        <span class="text-base text-slate-700">les salle desponible 7j / 24H</span>
+                    </li>
+                    <li class="flex space-x-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 h-5 w-5 text-green-400" width="24"
+                            height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M5 12l5 5l10 -10"></path>
+                        </svg>
+                        <span class="text-base text-slate-700">les service gratoute</span>
+                    </li>
+                    <li class="flex space-x-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 h-5 w-5 text-green-400" width="24"
+                            height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M5 12l5 5l10 -10"></path>
+                        </svg>
+                        <span class="text-base text-slate-700">les equitements gratoute</span>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <div class="border border-slate-200 rounded-lg shadow-sm divide-y divide-slate-200">
+            <div class="p-6">
+                <h2 class="text-xl leading-6 font-bold text-slate-900">normal</h2>
+                <p class="mt-8">
+                    <span class="text-4xl font-bold text-slate-900 tracking-tighter">100DH</span>
+
+                    <span class="text-base font-medium text-slate-500">/mois</span>
+                </p><button  id = 'normale-button'                    class="mt-8 block w-full bg-cyan-900 rounded-md py-2 text-sm font-semibold text-white text-center">payer</button>
+            </div>
+            <div class="pt-6 pb-8 px-6">
+                <h3 class="text-sm font-bold text-slate-900 tracking-wide uppercase">les offres</h3>
+                <ul role="list" class="mt-4 space-y-3">
+                    <li class="flex space-x-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 h-5 w-5 text-green-400" width="24"
+                            height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M5 12l5 5l10 -10"></path>
+                        </svg>
+                        <span class="text-base text-slate-700">les salle desponible 7j / 24H</span>
+                    </li>
+                    <li class="flex space-x-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 h-5 w-5 text-green-400" width="24"
+                            height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M5 12l5 5l10 -10"></path>
+                        </svg>
+                        <span class="text-base text-slate-700">la redution sur les equipments de 10%</span>
+                    </li>
+                    <li class="flex space-x-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 h-5 w-5 text-green-400" width="24"
+                            height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M5 12l5 5l10 -10"></path>
+                        </svg>
+                        <span class="text-base text-slate-700">la redution sur les services de 20%</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+    <script>
+        const stripe = Stripe("{{ stripe_publishable_key}}");
+
+        document.getElementById("normale-button").addEventListener("click", function () {
+
+          v = "10000"
+           const price ="66";
+            fetch("/sripe/create_checkout_abonne", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: v
+            })
+            .then(response => response.json())
+            .then(session => {
+                return stripe.redirectToCheckout({ sessionId: session.id });
+            })
+            .catch(error => console.error("Error:", error));
+        });
+         document.getElementById("pro-button").addEventListener("click", function () {
+
+          v = "25000"
+           const price ="66";
+            fetch("/sripe/create_checkout_abonne", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: v
+            })
+            .then(response => response.json())
+            .then(session => {
+                return stripe.redirectToCheckout({ sessionId: session.id });
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    </script>
+{% endblock %}

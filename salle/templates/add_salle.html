@@ -1,0 +1,198 @@
+{% extends 'menu.html' %}
+{% block content %}
+            <!-- Modal body -->
+           
+        <div class="p-6 space-y-6 contrast border-slate-200		 rounded-lg   border shadow-2xl "> 
+            <h3 class="text-3xl">
+                {% if is_up %}
+           Update
+           {% else %}
+           Create
+           {% endif %} salle
+             </h3>
+           
+
+                <form  action={% url 'salle_save'  %} enctype="multipart/form-data" method="post">
+                    {% csrf_token %}
+                    <div class="grid grid-cols-6 gap-6">
+                        <div class=" sm:col-span-6">
+                            <button  type='button' onclick="openEquipment()" class="bg-yellow-500 col-span-10 w-full sm:col-span-6 hover:bg-yellow-600 text-white px-4 py-2 rounded transition-colors">
+                        Add  Equipment
+                    </button>
+                        </div>
+                        <div class=" sm:col-span-6">
+                               <p>les equipment inclus</p> <pr>
+                               <div class="flex justify-center rounded-lg shadow-md p-5 ">
+                    {% for equipment_reserve in equipments_selected  %}
+                                 <span id="badge-dismiss-yellow" class="inline-flex  items-center px-2 py-1 me-2 text-sm font-medium text-yellow-800 bg-yellow-100 rounded-sm dark:bg-yellow-900 dark:text-yellow-300">
+                                {{equipment_reserve}}   
+                                <a href="{% url 'delete_equi'  equipment_reserve %}">
+                                <button type="button" class="inline-flex items-center p-1 ms-2 text-sm text-yellow-400 bg-transparent rounded-xs hover:bg-yellow-200 hover:text-yellow-900 dark:hover:bg-yellow-800 dark:hover:text-yellow-300" data-dismiss-target="#badge-dismiss-yellow" aria-label="Remove">
+                                <svg class="w-2 h-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                </svg>
+                                <span class="sr-only">Remove badge</span>
+                                </button>
+                                </a>
+                                </span>
+                    
+                    {% endfor %}
+                    </div>
+                        </div>
+                        <div class="col-span-6 sm:col-span-3">
+                            <label  class="block mb-2 text-sm font-medium text-gray-900">name</label>
+                            <input type="text" name="name" value={{salle.name}} ""  class="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5" placeholder=" name for salle" >
+                            {% if errors.name %} <p class="text-red-500">{{errors.name }}</p> {% endif %}
+
+                        </div>
+                        <div class="col-span-6 sm:col-span-3">
+                            <label class="block mb-2 text-sm font-medium text-gray-900">prix</label>
+                            <input type="text" name="prix" value={{salle.prix}} ""  class="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5" placeholder=" prix for salle of 1 heur" >
+                     {% if errors.prix %} <p class="text-red-500">{{errors.prix }}</p> {% endif %}
+
+                        </div>
+
+                        <div class="col-span-10 sm:col-span-6">
+                             <label for="categorie" class="block mb-2 text-sm font-medium text-gray-900">categorie</label>
+                                <select id="countries" name="categorie" class="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5">
+                                <option  value = "">countries ...</option>                                
+                                <option value="IT" {% if salle.categorie == "IT"  %} selected {% endif %}>IT</option>
+                                <option value="Design" {% if salle.categorie == "Design" %} selected {% endif %}>Design </option>
+                                <option value="Entrepreneurs sociaux" {% if salle.categorie == "Entrepreneurs sociaux" %} selected {% endif %}>Entrepreneurs sociaux </option>
+                                <option value="Professionnels du bien-être" {% if salle.categorie == "Professionnels du bien-être" %} selected {% endif %}>Professionnels du bien-être </option>
+                                </select> 
+                                
+                                {% if errors.categorie %} <p class="text-red-500">{{errors.categorie }}</p> {% endif %}
+
+                        </div>
+                         
+                    
+                    <script>
+  function openEquipment() {
+    document.getElementById('equipment').classList.remove('hidden');
+  }
+  
+  function closeEquipment() {
+    document.getElementById('equipment').classList.add('hidden');
+  }
+</script>
+<div id="equipment" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black/30 backdrop-blur-sm">
+  <div class="bg-white rounded-lg shadow-xl z-50 w-full max-w-md mx-4 max-h-[90vh] overflow-hidden flex flex-col">
+    <!-- Modal header -->
+    <div class="flex justify-between items-center p-4 border-b sticky top-0 bg-white z-10">
+      <h3 class="text-lg font-semibold text-gray-800">Add Equipment</h3>
+      <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 text-xl transition-colors">
+        &times;
+      </button>
+    </div>
+    
+    <!-- Modal body -->
+    <div class="p-4 overflow-y-auto flex-1">
+      <div class="mb-4 flex justify-between items-center">
+        <h5 class="text-lg font-bold text-gray-900">Available Equipment</h5>
+        <span class="text-sm text-gray-500">{{ equipments|length }} items</span>
+      </div>
+      
+      <div class="border border-gray-200 rounded-lg overflow-hidden">
+        <ul class="divide-y divide-gray-200">
+          {% for equipment in equipments %}
+          <li class="py-3 px-4 hover:bg-gray-50 transition-colors duration-150">
+            <div class="flex items-center justify-between gap-3">
+              <!-- Equipment Info -->
+              <div class="flex items-center flex-1 min-w-0">
+                <div class="shrink-0">
+                  <img class="w-10 h-10 rounded-lg object-cover border border-gray-200" 
+                       src="{{ equipment.photo }}" 
+                       alt="{{ equipment.nom }}"
+                       loading="lazy">
+                </div>
+                <div class="ml-3 min-w-0">
+                  <p class="text-sm font-semibold text-gray-900 truncate">
+                    {{ equipment.nom }}
+                  </p>
+                  <p class="text-xs text-gray-500 truncate">
+                    {{ equipment.categorie }}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Price -->
+              <div class="w-16 text-right">
+                <span class="text-sm font-medium text-gray-900 whitespace-nowrap">
+                  {{ equipment.prix }} DH
+                </span>
+              </div>
+
+              <!-- Quantity Form -->
+              <div class="flex items-center">
+                <div class="w-16 mr-2">
+                  <a href={% url 'add_equii' equipment.nom %} class="text-sm text-gray-500 hover:text-gray-700 transition-colors">
+                <button type="button" 
+                        class="p-2 text-blue-600 hover:text-white hover:bg-blue-600 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                        aria-label="Add equipment">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+                    <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z"/>
+                  </svg>
+                </button>
+                  </a>
+              </div>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    
+    <!-- Modal footer -->
+    <div class="p-4 border-t sticky bottom-0 bg-white flex justify-end">
+      <button onclick="closeEquipment()" type="button" class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+        Close
+      </button>
+    </div>
+  </div>
+</div>
+                        
+                 <div class="col-span-full">                          
+                            <label for="product-details" class="block mb-2 text-sm font-medium text-gray-900">Product Details</label>
+                            <textarea id="product-details" name="description" rows="6" class="block p-4 w-full text-gray-900 border border-gray-300 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300" placeholder="e.g. 3.8GHz 8-core 10th-generation Intel Core i7 processor, Turbo Boost up to 5.0GHz, Ram 16 GB DDR4 2300Mhz"> {{salle.description}}</textarea>
+                            {% if errors.description %} <p class="text-red-500">{{errors.description }}</p> {% endif %}
+
+                        </div>
+
+                    </div>
+
+                    <div class="flex justify-center items-center mt-4 w-full">
+
+                        <label class="flex flex-col w-full h-32 rounded border-2 border-gray-300 border-dashed cursor-pointer hover:bg-gray-50">
+                          <div class="flex flex-col justify-center items-center pt-5 pb-6">
+                            <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                            <p class="py-1 text-sm text-gray-600">Upload imge </p>
+                            <p class="text-xs text-gray-500">PNG, up to 10MB</p>
+                          </div>
+                          <input type="file" class="hidden" name="photo"/>
+                        </label>
+                    </div>
+                    {% if errors.photo %} <p class="text-red-500">{{errors.photo }}</p> {% endif %}
+
+ 
+                    <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
+
+                    <button class="text-white font-medium text-sm px-5 py-2.5 text-center rounded-lg bg-gradient-to-br bg-sky-500  shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform" type="submit"> 
+                    
+                       {% if is_up %}
+            Edit
+           {% else %}
+           Add
+           {% endif %}
+                      salle
+                    </button>
+                    
+                    
+                    <a href= {% url 'salle_list'  %}  > 
+                     <button class="text-white font-medium text-sm px-5 py-2.5 text-center rounded-lg bg-gradient-to-br from-rose-500 to-rose-500 shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform"  type="button">Cansel</button> </a>
+                    
+                </div>
+                <!-- Modal footer -->
+            </form>
+        </div>
+{% endblock %}

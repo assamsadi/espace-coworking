@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Professional Navbar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+</head>
+<body class="bg-whiteflex flex-col min-h-screen">
+    <!-- Premium Professional Navigation Bar -->
+    <nav class="bg-cyan-600 shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <!-- Left Section - Logo/Brand -->
+                <div class="flex items-center">
+                    <a href="#" class="flex items-center group">
+                        <div class=" p-2 rounded-lg transition-colors duration-300">
+
+                        </div>
+                        <span class="ml-3 text-xl font-bold text-white group-hover:text-blue-600 transition-colors duration-300">DeepWork</span>
+                    </a>
+                </div>
+
+                <!-- Center Section - Main Navigation (Desktop) -->
+                <div class="hidden md:flex items-center space-x-1 m-2.5">
+                    <div class="dropdown relative">
+                    <a  href = {% url "list_reservation" %}>
+                        <button class="nav-link   hover:text-cyan-600 px-4 py-2 flex items-center rounded-lg hover:bg-blue-50 {% if title == 'Reservations' %} text-cyan-600 bg-blue-50 {% else %} text-white {% endif %}  transition-colors duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5 mx-2.5">
+                             <path fill-rule="evenodd" d="M18 5.25a2.25 2.25 0 0 0-2.012-2.238A2.25 2.25 0 0 0 13.75 1h-1.5a2.25 2.25 0 0 0-2.238 2.012c-.875.092-1.6.686-1.884 1.488H11A2.5 2.5 0 0 1 13.5 7v7h2.25A2.25 2.25 0 0 0 18 11.75v-6.5ZM12.25 2.5a.75.75 0 0 0-.75.75v.25h3v-.25a.75.75 0 0 0-.75-.75h-1.5Z" clip-rule="evenodd" />
+                            <path fill-rule="evenodd" d="M3 6a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H3Zm6.874 4.166a.75.75 0 1 0-1.248-.832l-2.493 3.739-.853-.853a.75.75 0 0 0-1.06 1.06l1.5 1.5a.75.75 0 0 0 1.154-.114l3-4.5Z" clip-rule="evenodd" />
+                        </svg>
+
+
+                            Reservations
+                        </button>
+                    </a>
+                    </div>
+
+                    <div class="dropdown relative">
+                     <a href = {% url  "create_page" %}>
+                        <button class="nav-link  hover:text-cyan-600  px-4 py-2 flex items-center rounded-lg hover:bg-blue-50 {% if title == 'New_Reservation' %} text-cyan-600  bg-blue-50 {% else %} text-white  {% endif %}  transition-colors duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5 mx-2.5">
+                                <path fill-rule="evenodd" d="M15.988 3.012A2.25 2.25 0 0 1 18 5.25v6.5A2.25 2.25 0 0 1 15.75 14H13.5V7A2.5 2.5 0 0 0 11 4.5H8.128a2.252 2.252 0 0 1 1.884-1.488A2.25 2.25 0 0 1 12.25 1h1.5a2.25 2.25 0 0 1 2.238 2.012ZM11.5 3.25a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 .75.75v.25h-3v-.25Z" clip-rule="evenodd" />
+                                <path fill-rule="evenodd" d="M2 7a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7Zm2 3.25a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1-.75-.75Zm0 3.5a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
+                            </svg>
+                        New Reservation
+                            
+                        </button>
+                    </div>
+                    </a>
+
+                    <a href={% url "list_page_billet" %} class="nav-link {% if title == 'Billes' %} text-cyan-600  bg-blue-50 {% else %} text-white  {% endif %}  hover:text-cyan-600 px-4 py-2 flex items-center rounded-lg hover:bg-blue-50 transition-colors duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5 mx-2.5">
+                         <path fill-rule="evenodd" d="M15.75 3A2.25 2.25 0 0 1 18 5.25v1.214c0 .423-.277.788-.633 1.019A2.997 2.997 0 0 0 16 10c0 1.055.544 1.982 1.367 2.517.356.231.633.596.633 1.02v1.213A2.25 2.25 0 0 1 15.75 17H4.25A2.25 2.25 0 0 1 2 14.75v-1.213c0-.424.277-.789.633-1.02A2.998 2.998 0 0 0 4 10a2.997 2.997 0 0 0-1.367-2.517C2.277 7.252 2 6.887 2 6.463V5.25A2.25 2.25 0 0 1 4.25 3h11.5ZM13.5 7.396a.75.75 0 0 0-1.5 0v1.042a.75.75 0 0 0 1.5 0V7.396Zm0 4.167a.75.75 0 0 0-1.5 0v1.041a.75.75 0 0 0 1.5 0v-1.041Z" clip-rule="evenodd" />
+                        </svg>
+                        Billes
+                    </a>
+                        {% if is_abonnee %}
+                        
+                        {% else %}
+                        
+                        
+                    <a href={% url "page_abo" %} class="nav-link {% if title == 'Abonnement' %} text-cyan-600  bg-blue-50 {% else %} text-white  {% endif %}  hover:text-cyan-600 px-4 py-2 flex items-center rounded-lg hover:bg-blue-50 transition-colors duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5 mx-2.5">
+                            <path fill-rule="evenodd" d="M16.403 12.652a3 3 0 0 0 0-5.304 3 3 0 0 0-3.75-3.751 3 3 0 0 0-5.305 0 3 3 0 0 0-3.751 3.75 3 3 0 0 0 0 5.305 3 3 0 0 0 3.75 3.751 3 3 0 0 0 5.305 0 3 3 0 0 0 3.751-3.75Zm-2.546-4.46a.75.75 0 0 0-1.214-.883l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd" />
+                        </svg>
+
+                        Abonnement
+                    </a>
+                        {% endif %}
+
+                    
+
+                    
+                   
+                    
+                </div>
+
+                <!-- Right Section - Actions -->
+                <div class="flex items-center space-x-3">
+                    
+
+                 
+
+                    <div class="hidden md:block h-6 w-px bg-white"></div>
+
+                    <div class="dropdown relative">
+                       <div class="flex items-center space-x-2 focus:outline-none group">
+                       <div class="hidden lg:flex flex-col items-start">
+        <span class="text-sm font-medium text-white group-hover:text-blue-600 transition-colors duration-200">{{ user.username }}</span>
+        <span class="text-xs text-white">{{ user.role }} 
+        {% if is_abonnee %}
+         (abonnee)
+        {% endif %}
+        </span>
+    </div>
+    <div class="relative">
+        <a class="ml-4" href="{% url 'logout' %}"> 
+            <button type="button" class="text-white bg-[#316179] hover:bg-[#316179]/90 focus:ring-4 focus:outline-none focus:ring-[#050708]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#050708]/50 dark:hover:bg-[#050708]/30 me-2 mb-2">
+                logout 
+                <div class="mx-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 transform rotate-180">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
+                    </svg>
+                </div>
+            </button>
+        </a>                          
+    </div>
+    
+</div>
+                        <div class="dropdown-menu absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl py-1 z-50 opacity-0 invisible transition-all duration-300 transform -translate-y-2 border border-white">
+                            <div class="px-4 py-3 border-b border-white">
+                                <div class="flex items-center">
+                                
+                                    
+                                    <div>
+                                     
+                                        <p class="font-medium text-white"> {{ user.username }}</p>
+                                        <p class="text-sm text-white">{{ user.role }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+       
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-y-auto p-6 bg-white">
+        {% block content %}
+        <!-- Your content will go here -->
+        {% endblock %}
+    </main>
+
+    <!-- JavaScript for enhanced functionality -->
+   
+</body>
+</html>

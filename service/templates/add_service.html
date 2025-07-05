@@ -1,0 +1,72 @@
+{% extends 'menu.html' %}
+{% block content %}
+            <!-- Modal body -->
+           
+        <div class="p-6 space-y-6 contrast border-slate-200		 rounded-lg   border shadow-2xl "> 
+            <h3 class="text-3xl">
+            {% if is_up %}
+            Update
+            {% else %}
+              Create
+            {% endif %}
+             Servise
+             </h3>
+           {{is_up}}
+                <form  action={% url 'service_save'  %} enctype="multipart/form-data" method="post">
+                    {% csrf_token %}
+                    <div class="grid grid-cols-6 gap-6">
+                        <div class="col-span-6 sm:col-span-3">
+                            <label  class="block mb-2 text-sm font-medium text-gray-900">name</label>
+                            <input type="text" name="nom" value={{equipment.nom}} ""  class="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5" placeholder=" name for equipment" >
+                            {% if errors.name %} <p class="text-red-500">{{errors.name }}</p> {% endif %}
+
+                        </div>
+                        <div class="col-span-6 sm:col-span-3">
+                            <label class="block mb-2 text-sm font-medium text-gray-900">prix</label>
+                            <input type="text" name="prix" value={{equipment.prix}} ""  class="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5" placeholder=" prix for equipment of 1 heur" >
+                     {% if errors.prix %} <p class="text-red-500">{{errors.prix }}</p> {% endif %}
+
+                        </div>
+
+                        <div class="col-span-6 sm:col-span-9">
+                             <label for="categorie" class="block mb-2 text-sm font-medium text-gray-900">categorie</label>
+                                <select id="countries" name="categorie"  class="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5">
+                                <option  value = "">type ...</option>
+                                {% comment %} <option value="client" {% if user.role == "client"  %} selected {% endif %} >Client</option> {% endcomment %}
+                                <option value="VIP" {% if equipment.categorie == "VIP"  %} selected {% endif %}>VIP</option>
+                                <option value="VVIP" {% if equipment.categorie == "VVIP"  %} selected {% endif %} >VVIP</option>
+                                </select> 
+                                                     {% if errors.categorie %} <p class="text-red-500">{{errors.photo }}</p> {% endif %}
+
+                        </div>
+                        
+                 <div class="col-span-full">                          
+                            <label for="product-details" class="block mb-2 text-sm font-medium text-gray-900">Product Details</label>
+                            <textarea id="product-details" name="description" rows="3" class="block p-4 w-full text-gray-900 border border-gray-300 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300" placeholder="e.g. 3.8GHz 8-core 10th-generation Intel Core i7 processor, Turbo Boost up to 5.0GHz, Ram 16 GB DDR4 2300Mhz"> {{equipment.description}}</textarea>
+                            {% if errors.description %} <p class="text-red-500">{{errors.description }}</p> {% endif %}
+
+                        </div>
+
+                    </div>
+
+                 
+                    {% if errors.photo %} <p class="text-red-500">{{errors.photo }}</p> {% endif %}
+
+ 
+                    <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
+
+                    <button class="text-white font-medium text-sm px-5 py-2.5 text-center rounded-lg bg-gradient-to-br from-sky-500 to-sky-500 shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform" type="submit"> 
+                    
+                    Add
+                      equipment
+                    </button>
+                    
+                    
+                    <a  href={% url 'service_list'  %} class="text-white font-medium text-sm px-5 py-2.5 text-center rounded-lg bg-gradient-to-br from-rose-500 to-rose-500 shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform" > 
+                     Cansel</a>
+                    
+                </div>
+                <!-- Modal footer -->
+            </form>
+        </div>
+{% endblock %}

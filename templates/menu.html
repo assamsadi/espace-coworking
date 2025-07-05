@@ -1,0 +1,130 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Management</title>
+    {% tailwind_css %}
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="hidden md:flex md:flex-shrink-0">
+            <div class="flex flex-col w-64 bg-[#316179]  text-white">
+                <div class="flex items-center justify-center h-21 px-4 bg-[#234151] ">
+                    <span class="text-xl font-semibold">DeepWork</span>
+                </div>
+                <div class="flex flex-col flex-grow px-4 py-4 overflow-y-auto">
+                    <nav class="flex-1 space-y-2">
+                    {% if user.role == 'admin' %}
+                        <a href={% url "dashboard_page" %} class="flex items-center px-4 py-2 text-sm font-medium rounded-md  {% if title == 'Dashboard' %}bg-cyan-700 {% endif %} hover:bg-cyan-700 text-white ">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 mr-4">
+                                 <path fill-rule="evenodd" d="M2.25 2.25a.75.75 0 0 0 0 1.5H3v10.5a3 3 0 0 0 3 3h1.21l-1.172 3.513a.75.75 0 0 0 1.424.474l.329-.987h8.418l.33.987a.75.75 0 0 0 1.422-.474l-1.17-3.513H18a3 3 0 0 0 3-3V3.75h.75a.75.75 0 0 0 0-1.5H2.25Zm6.04 16.5.5-1.5h6.42l.5 1.5H8.29Zm7.46-12a.75.75 0 0 0-1.5 0v6a.75.75 0 0 0 1.5 0v-6Zm-3 2.25a.75.75 0 0 0-1.5 0v3.75a.75.75 0 0 0 1.5 0V9Zm-3 2.25a.75.75 0 0 0-1.5 0v1.5a.75.75 0 0 0 1.5 0v-1.5Z" clip-rule="evenodd" />
+                            </svg>
+                            Dashboard
+                        </a>
+                        <a href={% url "list_users" %} class="flex {% if title == 'Users' %}bg-cyan-700 {% endif %} items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-cyan-700 text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 mr-4">
+                                <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
+                            </svg>
+
+                            Users
+                        </a>
+                    {% endif %}
+                        
+                        <a href={% url "salle_list" %} class="flex {% if title == 'Salles' %}bg-cyan-700 {% endif %} items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-cyan-700 text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 mr-4">
+                                <path d="M5.223 2.25c-.497 0-.974.198-1.325.55l-1.3 1.298A3.75 3.75 0 0 0 7.5 9.75c.627.47 1.406.75 2.25.75.844 0 1.624-.28 2.25-.75.626.47 1.406.75 2.25.75.844 0 1.623-.28 2.25-.75a3.75 3.75 0 0 0 4.902-5.652l-1.3-1.299a1.875 1.875 0 0 0-1.325-.549H5.223Z" />
+                                <path fill-rule="evenodd" d="M3 20.25v-8.755c1.42.674 3.08.673 4.5 0A5.234 5.234 0 0 0 9.75 12c.804 0 1.568-.182 2.25-.506a5.234 5.234 0 0 0 2.25.506c.804 0 1.567-.182 2.25-.506 1.42.674 3.08.675 4.5.001v8.755h.75a.75.75 0 0 1 0 1.5H2.25a.75.75 0 0 1 0-1.5H3Zm3-6a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-.75.75h-3a.75.75 0 0 1-.75-.75v-3Zm8.25-.75a.75.75 0 0 0-.75.75v5.25c0 .414.336.75.75.75h3a.75.75 0 0 0 .75-.75v-5.25a.75.75 0 0 0-.75-.75h-3Z" clip-rule="evenodd" />
+                            </svg>
+
+                            Salles
+                        </a>
+                        <a href={% url "equipment_list" %} class="flex {% if title == 'Equipments' %}bg-cyan-700 {% endif %} items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-cyan-700 text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 mr-4">
+                                    <path fill-rule="evenodd" d="M12 6.75a5.25 5.25 0 0 1 6.775-5.025.75.75 0 0 1 .313 1.248l-3.32 3.319c.063.475.276.934.641 1.299.365.365.824.578 1.3.64l3.318-3.319a.75.75 0 0 1 1.248.313 5.25 5.25 0 0 1-5.472 6.756c-1.018-.086-1.87.1-2.309.634L7.344 21.3A3.298 3.298 0 1 1 2.7 16.657l8.684-7.151c.533-.44.72-1.291.634-2.309A5.342 5.342 0 0 1 12 6.75ZM4.117 19.125a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Z" clip-rule="evenodd" />
+                                    <path d="m10.076 8.64-2.201-2.2V4.874a.75.75 0 0 0-.364-.643l-3.75-2.25a.75.75 0 0 0-.916.113l-.75.75a.75.75 0 0 0-.113.916l2.25 3.75a.75.75 0 0 0 .643.364h1.564l2.062 2.062 1.575-1.297Z" />
+                                    <path fill-rule="evenodd" d="m12.556 17.329 4.183 4.182a3.375 3.375 0 0 0 4.773-4.773l-3.306-3.305a6.803 6.803 0 0 1-1.53.043c-.394-.034-.682-.006-.867.042a.589.589 0 0 0-.167.063l-3.086 3.748Zm3.414-1.36a.75.75 0 0 1 1.06 0l1.875 1.876a.75.75 0 1 1-1.06 1.06L15.97 17.03a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                            </svg>
+
+                            Equipments
+                        </a>
+                        <a href={% url "service_list" %} class="flex {% if title == 'Services' %}bg-cyan-700 {% endif %} items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-cyan-700 text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 mr-4">
+                            <path d="M6 3a3 3 0 0 0-3 3v2.25a3 3 0 0 0 3 3h2.25a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3H6ZM15.75 3a3 3 0 0 0-3 3v2.25a3 3 0 0 0 3 3H18a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3h-2.25ZM6 12.75a3 3 0 0 0-3 3V18a3 3 0 0 0 3 3h2.25a3 3 0 0 0 3-3v-2.25a3 3 0 0 0-3-3H6ZM17.625 13.5a.75.75 0 0 0-1.5 0v2.625H13.5a.75.75 0 0 0 0 1.5h2.625v2.625a.75.75 0 0 0 1.5 0v-2.625h2.625a.75.75 0 0 0 0-1.5h-2.625V13.5Z" />
+                        </svg>
+                            Services
+                        </a>
+                        <a href={% url "list_page_staff" %} class="flex {% if title == 'Reservations' %}bg-cyan-700 {% endif %} items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-cyan-700 text-white">
+                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 mr-4">
+                                 <path d="M12.75 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM7.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM8.25 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM9.75 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM10.5 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM12.75 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM14.25 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 13.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" />
+                                <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 0 1 7.5 3v1.5h9V3A.75.75 0 0 1 18 3v1.5h.75a3 3 0 0 1 3 3v11.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3H6V3a.75.75 0 0 1 .75-.75Zm13.5 9a1.5 1.5 0 0 0-1.5-1.5H5.25a1.5 1.5 0 0 0-1.5 1.5v7.5a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5v-7.5Z" clip-rule="evenodd" />
+                            </svg>
+
+                            Reservations
+                        </a>
+                       
+                    </nav>
+                </div>
+                <div class="p-4 border-t border-[#97b8c9] ">
+                    <div class="flex items-center">
+                    <img  src="data:image/png;base64,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" class="h-10 w-10 rounded-full cursor-pointer bg-gray-200 border-2 border-blue-400"></img>
+                        <div class="ml-3">
+                           
+                            <p class="text-sm font-medium">{{ user.username }}</p>
+                            <p class="text-xs text-blue-200">{{ user.role }}</p>
+                        </div>
+        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex flex-col flex-1 overflow-hidden">
+            <!-- Top Navigation -->
+            <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200">
+                <div class="flex items-center">
+                    <button class="md:hidden text-gray-500 focus:outline-none">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="text-xl font-semibold text-gray-800 ml-4">{{title}}</h1>
+                
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="text-gray-500 focus:outline-none">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <button class="text-gray-500 focus:outline-none">
+                        <i class="fas fa-envelope"></i>
+                    </button>
+                    <div class="relative flex justify-evenly">
+    <button class="flex items-center focus:outline-none mr-4"> 
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALkAAACUCAMAAAD4QXiGAAABX1BMVEX/75T/////q5EhISFGRkbqd2CQpK7oAC3Lz9G/DSf/8ZX/sJUAAArHh3T/+Jn/rpT/7o4YGR30kXgAAACwqGr/+NT/87L/+t3//vn/9Ln/7Yn72osmJiYAABb/++b/9sb/8J3oa1vsiGc4ODj/8qj//fIREhsAABF0Ukntoon/tJL/983/4pQvLy8/Pz/pACICFBiiVkdWUjovLSbLvnjSyH3o4IsRGx1hRz85LixHNzKtmGOvXExOLirPa1fbgm3bloDzr3j5u4f/vJL/y5TvhG35noXh2JzGx6O1uafkqpnFuICYkm6Um5Sfra3p04d+eGMjKkF3ho8uMkCzqahiXlBCPjJqY0Nka3C+ABPnem6ff4uVlqK4O0ewu8GrYG2Qg1i+fITBYm3XGjbsAA5YWVnUmKLgWmrSp7B5e3vceYXn5OblPk3NwMV6dEyQZFjwnG/asqbJMTspHhY1Mx1EryhqAAAMt0lEQVR4nL2d/V/ayBPHg4DFiAEMKioqiEC1Sj0KWPGup16xV16xT1brXc/j2trWetqn7///+u6GBJJ9SGYSytTlD01KeDN+dmZ22Z0qIZ+WmVlJKkEtuTKV8Qug+OaeC8xN0edWZnyy+yOfmU4Gd7jJnpyeGRr54rQyKG6DXZleHA750iCxTfilH0+emckNROCMzeXQkkGSF2cHJnCnJZOzxR9JPohIKGVfwbkdQ55ZGujI5NCVJUyARJAXf6DDTfYVhGLg5Iv/1OEmugKPj1DyzBQaXCV/8OjgcgBITiSOYVY1wxTNNBXxGaBiB5LPwh1OqJ+kOyfVavWY/FRPrtO1Ov0MQPrk7CDJweWVqjbqO3d0Pb5QKqWolUqlhXJc1+90ag2g5+dWQF6HkBenoeCakj5ZKKfCvKXK8eoOcT0Efm4aEmIA5MVpqFS0+vVCWYBtwi/cua6D0JMQdG/yDFjjWu1Yzm2yd3IaBH3WWzCe5BmQx1WiYbV+XHIFN9iP6yD0aU90T/JZb42rWoOaerLgBU6stJCGjNQ5zwjjRb4EAG/UrkkAvE67S6Xn9ngHhO5VsnuQT3m/hVo7SS2UUqUyDJzYQgeUXaeCkC96P1+rpTzVzSlmBxTZ3WsYV/Kid62i1XRR+PbyehqAnlRcY6Mbeca7rFUbd3yAh1MlSIRJuiZTN3Lv0amqHbRUDCsdBx6lLuQz3oFcqx/7cTmxeAeSTZMuEzw5OWAKpKo7kBAuNphe5FKXkkOSvtqo+hMLsdI1qIKRlwFS8ilA0lfrrFY2t7ZSW1th8kNtk9qWmDx1XAehS6O6jDyTg5CnGbFkP9+9u53Nbme3m827xG4Su7spcTooqCdzMqfLyAFZn1jHmTc3b64S293dXbXbRFjo9tJJA1Ssy+KLhHwRBK5eO30enxgfGUlQG7HZ+ERWKJc7ILkoc5JUKiFfAYEz1WFqe9eB3EcXO70Gm92tYMgBhZaB3nGQb34WcRNL3BRpHVQCUBMPUiF5EeRyQr5j1/nW9oTQ5YR8NSvwOpRcEtSF5IDs2SV3lORbnyXgBH1XEBzBPhdnUhE5eAFRrdvBm6tScjpKOfQSbITKnC4ihyShLrkth25t7o5LwSk6G9ehsUWRpCMROVDlin2IboUn3MAJ+u7n7KY95QLjuWGi8CIgn4F/nWLViql4c8KVm2o9Qdjj8a1UCilzYnMCpQvIc+AHEnSjPk81JxJyjdvYExOf7zabTazLFSUHIV/ErDZraerBuIdSbJohtjYRp582DVl3sSzJJ1KeHLFsiyc36P2Q88svHHkxh3jg0MiVHBcYOXJg4h82OV8CsOSwZcThk/MLjSz5Yg7lieH5PMeOUZYcnD+HTc7lUYYcvlg+dHJ2Ls2QF1FPGya5wq7VMeSIzD9scrYCYMiRYhkmOZuMGHLcw4arFhbVOUCxu26GST6XcSHHyny45DMu5EiZkzJ1xzf5joLZDaBwQneSw2dD1LT5vdZPYZ/k4Z+W9+dxbl+Rk2dQD1L3l/PRAOTR6DISPSMlB3yh1edW96PEApFHW/PQHRiGLUrJMRWuup83yOlqs44k1+lNlDwanceQT0nJEdtv1HnjjaM///LLL81tJPl2k9z1s3H/8jqCfElKjtl/s5zvot+79+vuLoKb2u7ur/fudW/P78Gd7gwuDnL4rEJdN8GJTY4D5v0OS4xP9u6Ownd7Jadl5IhtfdqejRwLTtD75Pn7cHLHKp2THPoMRW1FB0X+BR4ZpeSYmVx0UOTRZTi5Y0bnj1wdJDm8CJCSz4A//GDJwW+rzEjI4YlooOSICmAqMLmiLQ9shO4NghyeiLT9gUVFRP5PyshvIVJoblDkiAGqJG8FJ7cKrsDkiEQ0KHLFKlwCkef3MFu9peSoZVx13kIPQv5lHTWjG0BssaP7J88jwQdETn7NX/JByPP5feypABk5PIda6PNfyPu30OAjiRa5bW8eOfmX59CZHBZd1dT1+X0fPt+fz4EPAfQtJyNHrvpb9OuYqVzXxtdVtL+VgdSKDvT1NTT5GnJkepH7O+qkKr+hyX/zcWDHbU6EmIc60O+jyTGJ00YunYeiV89N8nkseAK1ytInl8/9Uced+uQKVuhrvsTitt6CTEU9dKxc/InFbY0Ls65oJ1eQ5D5d7rKuiFvLtaHjnO7X5S5rucj18z65glpX9Otyl/Vzn8EF6XS/Lnf9zmLK57lyVdkHg6MLRMvmplzIi35PxMNLAJ+Jn5IXXcjR34fa0GFSH/cN7v59qM/830UHkfsHd+b+wN/729EhRYC/tG+Yx/f+xQDny7217l/jxJLuey2Qm6EYdI96119ta4Gz26HYPUWYNRceXb0vd/vafT/ToD75rZA7ub95UR99fX9ENC1NjOwHUYoC2McVSC6KsQozecBsdU0kDiaXA4xNat5750K3Ar0BJY9GW5N0HyvFT4yTMD/Zol+UByNXWLHw5MHk0iU3rDVJrWUt2QYk58Qi2JcbTC59cqcFJGfTkJAcesoik/Mb0AX7z4O8w48iF2Hyl/yWul3y9bWWALwVKH2yBa6MPJQLRk6DYItYF5nY5MFIIhg5D4ItYl1kYpMHI4lg5DwItoh1kYlNHowkgpHzINgi1kUmNnkwkghGzoNgi1gXmdjkwUgiGDkPgi1iXWRikwcjiWDkPAi2iHWRiU0ejCSCkfMg2CLWRSY2eTCSCEbOg2CLWBeZ2OTBSCIYOQ+CLWJdZGKTByOJYOQ8CLaIdZGJTR6MJIKR8yDYItZFJjZ5MJIYJvn/AB4zXp5w1X2PAAAAAElFTkSuQmCC" class="h-10 w-10 rounded-full cursor-pointer bg-gray-200 border-2 border-blue-400">
+    </button>
+    <a class="ml-4"  href= {% url "logout" %}> 
+        <button type="button" class="text-white bg-[#316179] hover:bg-[#316179]/90 focus:ring-4 focus:outline-none focus:ring-[#050708]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#050708]/50 dark:hover:bg-[#050708]/30 me-2 mb-2">
+            logout 
+            <div class="mx-1">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 transform rotate-180">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
+                </svg>
+            </div>
+        </button>
+    </a>
+</div>
+                </div>
+            </header>
+
+            <!-- Main Content Area -->
+            <main class="flex-1 overflow-y-auto p-6 bg-gray-100">
+                  {% block content %}
+                <!-- Your content will go here -->
+                {% endblock %}
+            </main>
+        </div>
+    </div>
+</body>
+
+</html>

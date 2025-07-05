@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bag Reservation System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        let currentPage = 1;
+        let selectedBag = null;
+        let reservedBags = [];
+        let timeIntervals = [];
+        let intervalCounter = 0;
+        let allBags = [
+            { id: 1, name: 'Travel Bag Pro', price: 89.99, category: 'travel', description: 'Premium travel bag with multiple compartments', color: 'blue' },
+            { id: 2, name: 'Business Elite', price: 129.99, category: 'business', description: 'Professional laptop bag with organizer', color: 'green' },
+            { id: 3, name: 'Adventure Pack', price: 159.99, category: 'outdoor', description: 'Outdoor hiking backpack with weather protection', color: 'red' },
+            { id: 4, name: 'Designer Tote', price: 199.99, category: 'fashion', description: 'Luxury leather tote bag for everyday use', color: 'purple' },
+            { id: 5, name: 'Sports Duffle', price: 79.99, category: 'sports', description: 'Large capacity sports bag with shoe compartment', color: 'orange' },
+            { id: 6, name: 'Weekend Getaway', price: 95.99, category: 'travel', description: 'Perfect size for short trips and weekend adventures', color: 'teal' }
+        ];
+        let filteredBags = [...allBags];
+
+        function showPage(pageNum) {
+            document.getElementById('page1').classList.toggle('hidden', pageNum !== 1);
+            document.getElementById('page2').classList.toggle('hidden', pageNum !== 2);
+            currentPage = pageNum;
+        }
+
+        function removeReservation(bagId) {
+            reservedBags = reservedBags.filter(bag => bag.id !== bagId);
+            updateReservedDisplay();
+        }
+
+        function viewBag(bagId, bagName, price) {
+            alert(`Viewing: ${bagName}\nPrice: $${price}`);
+        }
+
+        function buyBag(bagId, bagName, price) {
+            alert(`Purchasing: ${bagName}\nTotal: $${price}\nOrder confirmed!`);
+        }
+
+        function reserveBag(bagId, bagName, price) {
+            const bag = { id: bagId, name: bagName, price: price, date: new Date().toLocaleDateString() };
+            reservedBags.push(bag);
+            updateReservedDisplay();
+            alert(`Reserved: ${bagName}`);
+        }
+
+        function selectForCustomization(bagId, bagName, price) {
+            selectedBag = { id: bagId, name: bagName, price: price };
+            showPage(2);
+            document.getElementById('selectedBagName').textContent = bagName;
+            document.getElementById('selectedBagPrice').textContent = `$${price}`;
+            calculateTotal();
+        }
+
+        function updateReservedDisplay() {
+            const container = document.getElementById('reservedBags');
+            container.innerHTML = '';
+            
+            if (reservedBags.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-4">No reservations</p>';
+                return;
+            }
+
+            reservedBags.forEach(bag => {
+                const bagElement = document.createElement('div');
+                bagElement.className = 'bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-2';
+                bagElement.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h4 class="font-medium text-yellow-800">${bag.name}</h4>
+                            <p class="text-sm text-yellow-600">$${bag.price} - Reserved: ${bag.date}</p>
+                        </div>
+                        <button onclick="removeReservation(${bag.id})" class="text-red-500 hover:text-red-700">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(bagElement);
+            });
+        }
+
+        function filterBags() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const selectedCategory = document.getElementById('categorySelect').value;
+            
+            filteredBags = allBags.filter(bag => {
+                const matchesSearch = bag.name.toLowerCase().includes(searchTerm) || 
+                                    bag.description.toLowerCase().includes(searchTerm);
+                const matchesCategory = selectedCategory === 'all' || bag.category === selectedCategory;
+                
+                return matchesSearch && matchesCategory;
+            });
+            
+            displayBags();
+        }
+
+        function displayBags() {
+            const container = document.getElementById('bagsContainer');
+            container.innerHTML = '';
+            
+            if (filteredBags.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">No bags found</h3>
+                        <p class="text-gray-500">Try adjusting your search or category filter</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            filteredBags.forEach(bag => {
+                const bagElement = document.createElement('div');
+                bagElement.className = 'bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow';
+                bagElement.innerHTML = `
+                    <div class="h-48 bg-gradient-to-br from-${bag.color}-400 to-${bag.color}-600 flex items-center justify-center">
+                        <div class="text-white text-center">
+                            <svg class="w-16 h-16 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                            </svg>
+                            <p class="font-semibold">${bag.name}</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">${bag.name}</h3>
+                        <p class="text-gray-600 mb-2">${bag.description}</p>
+                        <span class="inline-block bg-${bag.color}-100 text-${bag.color}-800 text-xs px-2 py-1 rounded-full mb-4 capitalize">${bag.category}</span>
+                        <div class="text-2xl font-bold text-green-600 mb-4">$${bag.price}</div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="viewBag(${bag.id}, '${bag.name}', ${bag.price})" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition-colors">View</button>
+                            <button onclick="buyBag(${bag.id}, '${bag.name}', ${bag.price})" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition-colors">Buy</button>
+                            <button onclick="reserveBag(${bag.id}, '${bag.name}', ${bag.price})" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded transition-colors">Reserve</button>
+                            <button onclick="selectForCustomization(${bag.id}, '${bag.name}', ${bag.price})" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded transition-colors">Customize</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(bagElement);
+            });
+        }
+
+        function calculateTotal() {
+            const basePrice = selectedBag ? selectedBag.price : 0;
+            const equipmentCost = Array.from(document.querySelectorAll('input[name="equipment"]:checked'))
+                .reduce((sum, checkbox) => sum + parseFloat(checkbox.value), 0);
+            const servicesCost = Array.from(document.querySelectorAll('input[name="services"]:checked'))
+                .reduce((sum, checkbox) => sum + parseFloat(checkbox.value), 0);
+            
+            // Calculate interval-based costs
+            let intervalCosts = 0;
+            timeIntervals.forEach(interval => {
+                const intervalEquipmentCost = Array.from(document.querySelectorAll(`input[name="interval-equipment-${interval.id}"]:checked`))
+                    .reduce((sum, checkbox) => sum + parseFloat(checkbox.value), 0);
+                const intervalServicesCost = Array.from(document.querySelectorAll(`input[name="interval-services-${interval.id}"]:checked`))
+                    .reduce((sum, checkbox) => sum + parseFloat(checkbox.value), 0);
+                intervalCosts += intervalEquipmentCost + intervalServicesCost;
+            });
+            
+            const subtotal = basePrice + equipmentCost + servicesCost + intervalCosts;
+            const tax1 = subtotal * 0.08; // 8% tax
+            const tax2 = subtotal * 0.05; // 5% tax
+            const tax3 = subtotal * 0.02; // 2% tax
+            const total = subtotal + tax1 + tax2 + tax3;
+            
+            document.getElementById('subtotal').textContent = `${subtotal.toFixed(2)}`;
+            document.getElementById('tax1').textContent = `${tax1.toFixed(2)}`;
+            document.getElementById('tax2').textContent = `${tax2.toFixed(2)}`;
+            document.getElementById('tax3').textContent = `${tax3.toFixed(2)}`;
+            document.getElementById('total').textContent = `${total.toFixed(2)}`;
+        }
+
+        function addTimeInterval() {
+            const timeFrom = document.getElementById('timeFrom').value;
+            const timeTo = document.getElementById('timeTo').value;
+            
+            if (!timeFrom || !timeTo) {
+                alert('Please select both from and to times');
+                return;
+            }
+            
+            if (timeFrom >= timeTo) {
+                alert('From time must be earlier than to time');
+                return;
+            }
+            
+            intervalCounter++;
+            const interval = {
+                id: intervalCounter,
+                from: timeFrom,
+                to: timeTo
+            };
+            
+            timeIntervals.push(interval);
+            displayTimeIntervals();
+            
+            // Clear the time inputs
+            document.getElementById('timeFrom').value = '';
+            document.getElementById('timeTo').value = '';
+        }
+
+        function removeTimeInterval(intervalId) {
+            timeIntervals = timeIntervals.filter(interval => interval.id !== intervalId);
+            displayTimeIntervals();
+            calculateTotal();
+        }
+
+        function displayTimeIntervals() {
+            const container = document.getElementById('timeIntervals');
+            container.innerHTML = '';
+            
+            if (timeIntervals.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-4">No time intervals added</p>';
+                return;
+            }
+            
+            timeIntervals.forEach(interval => {
+                const intervalElement = document.createElement('div');
+                intervalElement.className = 'bg-gray-50 border border-gray-200 rounded-lg p-6';
+                intervalElement.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <h4 class="text-lg font-semibold text-gray-800">
+                            Time Interval: ${interval.from} - ${interval.to}
+                        </h4>
+                        <button onclick="removeTimeInterval(${interval.id})" class="text-red-500 hover:text-red-700">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Equipment for this interval -->
+                        <div>
+                            <h5 class="font-medium text-gray-700 mb-3">Equipment for this time</h5>
+                            <div class="space-y-2">
+                                <label class="flex items-center space-x-3">
+                                    <input type="checkbox" name="interval-equipment-${interval.id}" value="25.99" onchange="calculateTotal()" class="rounded border-gray-300">
+                                    <span class="text-sm">Waterproof Cover (+$25.99)</span>
+                                </label>
+                                <label class="flex items-center space-x-3">
+                                    <input type="checkbox" name="interval-equipment-${interval.id}" value="15.99" onchange="calculateTotal()" class="rounded border-gray-300">
+                                    <span class="text-sm">Extra Straps (+$15.99)</span>
+                                </label>
+                                <label class="flex items-center space-x-3">
+                                    <input type="checkbox" name="interval-equipment-${interval.id}" value="35.99" onchange="calculateTotal()" class="rounded border-gray-300">
+                                    <span class="text-sm">Security Lock Set (+$35.99)</span>
+                                </label>
+                                <label class="flex items-center space-x-3">
+                                    <input type="checkbox" name="interval-equipment-${interval.id}" value="19.99" onchange="calculateTotal()" class="rounded border-gray-300">
+                                    <span class="text-sm">Organizer Inserts (+$19.99)</span>
+                                </label>
+                                <label class="flex items-center space-x-3">
+                                    <input type="checkbox" name="interval-equipment-${interval.id}" value="45.99" onchange="calculateTotal()" class="rounded border-gray-300">
+                                    <span class="text-sm">Laptop Compartment (+$45.99)</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- Services for this interval -->
+                        <div>
+                            <h5 class="font-medium text-gray-700 mb-3">Services for this time</h5>
+                            <div class="space-y-2">
+                                <label class="flex items-center space-x-3">
+                                    <input type="checkbox" name="interval-services-${interval.id}" value="12.99" onchange="calculateTotal()" class="rounded border-gray-300">
+                                    <span class="text-sm">Monogram Embroidery (+$12.99)</span>
+                                </label>
+                                <label class="flex items-center space-x-3">
+                                    <input type="checkbox" name="interval-services-${interval.id}" value="8.99" onchange="calculateTotal()" class="rounded border-gray-300">
+                                    <span class="text-sm">Gift Wrapping (+$8.99)</span>
+                                </label>
+                                <label class="flex items-center space-x-3">
+                                    <input type="checkbox" name="interval-services-${interval.id}" value="24.99" onchange="calculateTotal()" class="rounded border-gray-300">
+                                    <span class="text-sm">Express Shipping (+$24.99)</span>
+                                </label>
+                                <label class="flex items-center space-x-3">
+                                    <input type="checkbox" name="interval-services-${interval.id}" value="39.99" onchange="calculateTotal()" class="rounded border-gray-300">
+                                    <span class="text-sm">Extended Warranty (+$39.99)</span>
+                                </label>
+                                <label class="flex items-center space-x-3">
+                                    <input type="checkbox" name="interval-services-${interval.id}" value="16.99" onchange="calculateTotal()" class="rounded border-gray-300">
+                                    <span class="text-sm">Professional Cleaning (+$16.99)</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(intervalElement);
+            });
+        }
+
+        function updateTimeIntervals() {
+            // This function can be used to validate time inputs in real-time if needed
+        }
+
+        function confirmOrder() {
+            const equipment = Array.from(document.querySelectorAll('input[name="equipment"]:checked'))
+                .map(cb => cb.nextElementSibling.textContent);
+            const services = Array.from(document.querySelectorAll('input[name="services"]:checked'))
+                .map(cb => cb.nextElementSibling.textContent);
+            
+            // Collect interval-based selections
+            let intervalDetails = [];
+            timeIntervals.forEach(interval => {
+                const intervalEquipment = Array.from(document.querySelectorAll(`input[name="interval-equipment-${interval.id}"]:checked`))
+                    .map(cb => cb.nextElementSibling.textContent);
+                const intervalServices = Array.from(document.querySelectorAll(`input[name="interval-services-${interval.id}"]:checked`))
+                    .map(cb => cb.nextElementSibling.textContent);
+                
+                if (intervalEquipment.length > 0 || intervalServices.length > 0) {
+                    intervalDetails.push({
+                        time: `${interval.from} - ${interval.to}`,
+                        equipment: intervalEquipment,
+                        services: intervalServices
+                    });
+                }
+            });
+            
+            let orderSummary = `Order Confirmed!\nBag: ${selectedBag.name}\n`;
+            orderSummary += `Equipment: ${equipment.join(', ') || 'None'}\n`;
+            orderSummary += `Services: ${services.join(', ') || 'None'}\n`;
+            
+            if (intervalDetails.length > 0) {
+                orderSummary += '\nTime-specific selections:\n';
+                intervalDetails.forEach(detail => {
+                    orderSummary += `\n${detail.time}:\n`;
+                    if (detail.equipment.length > 0) {
+                        orderSummary += `  Equipment: ${detail.equipment.join(', ')}\n`;
+                    }
+                    if (detail.services.length > 0) {
+                        orderSummary += `  Services: ${detail.services.join(', ')}\n`;
+                    }
+                });
+            }
+            
+            orderSummary += `\nTotal: ${document.getElementById('total').textContent}`;
+            alert(orderSummary);
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateReservedDisplay();
+            displayBags();
+        });
+    </script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-blue-600 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Bag Reservation System</h1>
+            <div class="space-x-4">
+                <button onclick="showPage(1)" class="px-4 py-2 bg-blue-500 hover:bg-blue-700 rounded transition-colors">
+                    Sales Display
+                </button>
+                <button onclick="showPage(2)" class="px-4 py-2 bg-blue-500 hover:bg-blue-700 rounded transition-colors">
+                    Customize Order
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page 1: Sales Display -->
+    <div id="page1" class="container mx-auto p-6">
+        <!-- Search and Filter Section -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <div class="flex flex-col md:flex-row gap-4 items-end">
+                <div class="flex-1">
+                    <label for="searchInput" class="block text-sm font-medium text-gray-700 mb-2">Search Bags</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+                        <input 
+                            type="text" 
+                            id="searchInput" 
+                            placeholder="Search by name or description..." 
+                            oninput="filterBags()"
+                            class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                        >
+                    </div>
+                </div>
+                <div class="w-full md:w-48">
+                    <label for="categorySelect" class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                    <select 
+                        id="categorySelect" 
+                        onchange="filterBags()"
+                        class="block w-full px-3 py-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                    >
+                        <option value="all">All Categories</option>
+                        <option value="travel">Travel</option>
+                        <option value="business">Business</option>
+                        <option value="outdoor">Outdoor</option>
+                        <option value="fashion">Fashion</option>
+                        <option value="sports">Sports</option>
+                    </select>
+                </div>
+                <button 
+                    onclick="document.getElementById('searchInput').value=''; document.getElementById('categorySelect').value='all'; filterBags();"
+                    class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-md transition-colors whitespace-nowrap"
+                >
+                    Clear Filters
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Main Sales Area -->
+            <div class="lg:col-span-2">
+                <h2 class="text-3xl font-bold mb-6 text-gray-800">Available Bags</h2>
+                
+                <!-- Bag Grid -->
+                <div id="bagsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- Bags will be dynamically loaded here -->
+                </div>
+            </div>
+
+            <!-- Reserved Bags Box -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-lg shadow-md p-6 sticky top-6">
+                    <h3 class="text-xl font-bold mb-4 text-gray-800">Reserved Bags</h3>
+                    <div id="reservedBags" class="space-y-3">
+                        <p class="text-gray-500 text-center py-4">No reservations</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 2: Equipment and Services Selection -->
+    <div id="page2" class="hidden container mx-auto p-6">
+        <div class="max-w-4xl mx-auto">
+            <div class="flex items-center mb-6">
+                <button onclick="showPage(1)" class="text-blue-600 hover:text-blue-800 mr-4">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                </button>
+                <h2 class="text-3xl font-bold text-gray-800">Customize Your Order</h2>
+            </div>
+
+            <!-- Selected Bag Display -->
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
+                <h3 class="text-xl font-semibold text-blue-800">Selected Bag</h3>
+                <div class="flex justify-between items-center mt-2">
+                    <span id="selectedBagName" class="text-lg font-medium">No bag selected</span>
+                    <span id="selectedBagPrice" class="text-lg font-bold text-green-600">$0.00</span>
+                </div>
+            </div>
+
+            <!-- Time Schedule Section -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                <h3 class="text-xl font-bold mb-4 text-gray-800">Service Schedule</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="timeFrom" class="block text-sm font-medium text-gray-700 mb-2">From Time</label>
+                        <input type="time" id="timeFrom" class="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500" onchange="updateTimeIntervals()">
+                    </div>
+                    <div>
+                        <label for="timeTo" class="block text-sm font-medium text-gray-700 mb-2">To Time</label>
+                        <input type="time" id="timeTo" class="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500" onchange="updateTimeIntervals()">
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <button onclick="addTimeInterval()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition-colors">
+                        Add Time Interval
+                    </button>
+                </div>
+                <div id="timeIntervals" class="mt-4 space-y-4">
+                    <!-- Time intervals will be added here -->
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Equipment Selection -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold mb-4 text-gray-800">Additional Equipment</h3>
+                    <div class="space-y-3">
+                        <label class="flex items-center space-x-3">
+                            <input type="checkbox" name="equipment" value="25.99" onchange="calculateTotal()" class="rounded border-gray-300">
+                            <span>Waterproof Cover (+$25.99)</span>
+                        </label>
+                        <label class="flex items-center space-x-3">
+                            <input type="checkbox" name="equipment" value="15.99" onchange="calculateTotal()" class="rounded border-gray-300">
+                            <span>Extra Straps (+$15.99)</span>
+                        </label>
+                        <label class="flex items-center space-x-3">
+                            <input type="checkbox" name="equipment" value="35.99" onchange="calculateTotal()" class="rounded border-gray-300">
+                            <span>Security Lock Set (+$35.99)</span>
+                        </label>
+                        <label class="flex items-center space-x-3">
+                            <input type="checkbox" name="equipment" value="19.99" onchange="calculateTotal()" class="rounded border-gray-300">
+                            <span>Organizer Inserts (+$19.99)</span>
+                        </label>
+                        <label class="flex items-center space-x-3">
+                            <input type="checkbox" name="equipment" value="45.99" onchange="calculateTotal()" class="rounded border-gray-300">
+                            <span>Laptop Compartment (+$45.99)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Integrated Services -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold mb-4 text-gray-800">Integrated Services</h3>
+                    <div class="space-y-3">
+                        <label class="flex items-center space-x-3">
+                            <input type="checkbox" name="services" value="12.99" onchange="calculateTotal()" class="rounded border-gray-300">
+                            <span>Monogram Embroidery (+$12.99)</span>
+                        </label>
+                        <label class="flex items-center space-x-3">
+                            <input type="checkbox" name="services" value="8.99" onchange="calculateTotal()" class="rounded border-gray-300">
+                            <span>Gift Wrapping (+$8.99)</span>
+                        </label>
+                        <label class="flex items-center space-x-3">
+                            <input type="checkbox" name="services" value="24.99" onchange="calculateTotal()" class="rounded border-gray-300">
+                            <span>Express Shipping (+$24.99)</span>
+                        </label>
+                        <label class="flex items-center space-x-3">
+                            <input type="checkbox" name="services" value="39.99" onchange="calculateTotal()" class="rounded border-gray-300">
+                            <span>Extended Warranty (+$39.99)</span>
+                        </label>
+                        <label class="flex items-center space-x-3">
+                            <input type="checkbox" name="services" value="16.99" onchange="calculateTotal()" class="rounded border-gray-300">
+                            <span>Professional Cleaning (+$16.99)</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pricing Summary with 3 Taxes -->
+            <div class="bg-white rounded-lg shadow-md p-6 mt-8">
+                <h3 class="text-xl font-bold mb-4 text-gray-800">Order Summary</h3>
+                <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <span>Subtotal:</span>
+                        <span id="subtotal" class="font-medium">$0.00</span>
+                    </div>
+                    <div class="flex justify-between text-sm text-gray-600">
+                        <span>Sales Tax (8%):</span>
+                        <span id="tax1">$0.00</span>
+                    </div>
+                    <div class="flex justify-between text-sm text-gray-600">
+                        <span>Service Tax (5%):</span>
+                        <span id="tax2">$0.00</span>
+                    </div>
+                    <div class="flex justify-between text-sm text-gray-600">
+                        <span>Processing Fee (2%):</span>
+                        <span id="tax3">$0.00</span>
+                    </div>
+                    <hr class="my-2">
+                    <div class="flex justify-between text-xl font-bold">
+                        <span>Total:</span>
+                        <span id="total" class="text-green-600">$0.00</span>
+                    </div>
+                </div>
+                
+                <div class="mt-6 space-y-3">
+                    <button onclick="confirmOrder()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                        Confirm Order
+                    </button>
+                    <button onclick="showPage(1)" class="w-full bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                        Back to Bags
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

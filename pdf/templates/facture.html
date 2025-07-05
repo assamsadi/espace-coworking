@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Commande PDF</title>
+    <style>
+        body { font-family: sans-serif; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #000; padding: 8px; text-align: left; }
+        th { background-color: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <h1>Commande de {{ user }}</h1>
+    <p>Status de la commande : <strong>{{ status }}</strong></p>
+    <p>Date de génération : {{ current_time }}</p>
+
+    <h2>Livres commandés</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nom</th>
+                <th>Quantité</th>
+                <th>Prix unitaire (€)</th>
+                <th>Prix total (€)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in command_book %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ book.name }}</td>
+                <td>{{ book.que }}</td>
+                <td>{{ book.price }}</td>
+                <td>{{ book.priceTolat }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nom</th>
+                <th>Quantité</th>
+                <th>Prix unitaire (€)</th>
+                <th>Prix total (€)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in command_book %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ book.name }}</td>
+                <td>{{ book.que }}</td>
+                <td>{{ book.price }}</td>
+                <td>{{ book.priceTolat }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3>Détail du prix</h3>
+    <p>Total HT : {{ price_total }} DHS</p>
+    <p>TVA (20%) : {{ tva|floatformat:2 }} DHS</p>
+    <p><strong>Total TTC : {{ price_fin }} DHS</strong></p>
+
+    <h3>QR Code</h3>
+    <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code" width="150" height="150">
+</body>
+</html>

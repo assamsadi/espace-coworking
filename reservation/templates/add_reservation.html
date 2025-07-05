@@ -1,0 +1,580 @@
+
+{% extends 'menu_user.html' %}
+{% block content %}
+
+
+
+    <!-- Page 1: Sales Display -->
+    {% if set_navigation == "menu" %}
+    
+
+    <div class="container mx-auto ">
+        <!-- Search and Filter Section -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+              <form action="{% url 'create_page' %}" method="post" class="mb-6">
+            <div class="flex flex-col md:flex-row gap-4 items-end">
+                   {% csrf_token %}
+                <div class="flex-1">
+                    <label for="searchInput" class="block text-sm font-medium text-gray-700 mb-2">Search Bags</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+                        <input 
+                            type="text" 
+                            id="searchInput" 
+                            name = "name"
+                            placeholder="Search by name or description..." 
+                            class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                        >
+                    </div>
+                </div>
+                <div class="w-full md:w-48">
+                    <label for="categorySelect" class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                    <select 
+                    value = "categorie"
+                    name= "categorie"
+                        id="categorySelect" 
+                        class="block w-full px-3 py-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                    >
+               <option  value = "">countries ...</option>                                
+                                <option >IT</option>
+                                <option >Design </option>
+                                <option >Entrepreneurs sociaux </option>
+                                <option >Professionnels du bien-être </option>
+                    </select>
+                </div>
+                <button
+                type="submit"
+                    class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-md transition-colors whitespace-nowrap"
+                >
+                    Clear Filters
+                </button>
+            </div>
+                </form>
+            
+        </div>
+
+       <div class="grid grid-cols-1 gap-6">
+    <!-- Main Sales Area -->
+    <div class="lg:col-span-2">
+    <h2 class="text-3xl font-bold mb-8 text-gray-800">Salle</h2>
+    
+    <!-- Room Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {% for salle in salles %}
+        <!-- Room Card -->
+        <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
+            <!-- Image with gradient overlay -->
+            <div class="relative h-48 w-full overflow-hidden">
+                <img class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" 
+                     src="{{ salle.photo }}" 
+                     alt="{{ salle.name }}">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+            </div>
+            
+            <!-- Card Content -->
+            <div class="p-5">
+                <div class="flex justify-between items-start mb-2">
+                    <h3 class="text-xl font-bold text-gray-800">{{ salle.name }}</h3>
+                    <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2.5 py-1 rounded-full font-medium capitalize">
+                        {{ salle.categorie }}
+                    </span>
+                </div>
+                
+                <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ salle.description|truncatechars:100 }}</p>
+                
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-2xl font-bold text-green-600">{{ salle.prix }} DH</span>
+                    <span class="text-sm text-gray-500">per day</span>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="openModal('modal-{{ salle.id }}')" 
+                            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-all flex items-center justify-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                        View
+                    </button>
+                    <a href="/reservation/set-time/{{ salle.id }}">
+                        <button class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-all flex items-center justify-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            reserver
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div id="modal-{{ salle.id }}" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+            <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeModal('modal-{{ salle.id }}')"></div>
+            
+            <div class="bg-white rounded-xl shadow-2xl z-50 w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
+                <!-- Modal header -->
+                <div class="flex justify-between items-center p-6 border-b sticky top-0 bg-white z-10">
+                    <h3 class="text-2xl font-bold text-gray-800">{{ salle.name }}</h3>
+                    <button onclick="closeModal('modal-{{ salle.id }}')" 
+                            class="text-gray-500 hover:text-gray-700 text-3xl transition-colors">
+                        &times;
+                    </button>
+                </div>
+                
+                <!-- Modal body -->
+                <div class="p-6 grid md:grid-cols-2 gap-8">
+                    <div class="relative h-80 rounded-xl overflow-hidden shadow-md">
+                        <img class="w-full h-full object-cover" src="{{ salle.photo }}" alt="{{ salle.name }}">
+                    </div>
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-800 mb-2">Description</h4>
+                            <p class="text-gray-600">{{ salle.description }}</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <span class="block text-sm text-gray-500 mb-1">Category</span>
+                                <span class="font-medium capitalize">{{ salle.categorie }}</span>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <span class="block text-sm text-gray-500 mb-1">Price</span>
+                                <span class="text-green-600 font-bold">{{ salle.prix }} DH</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Additional details can be added here -->
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h4 class="text-lg font-semibold text-blue-800 mb-2">Features</h4>
+                            <div class="flex flex-wrap gap-2">
+                                {% for equipment in salle.equipments %}
+                                
+                                <span class="bg-white px-3 py-1 rounded-full text-sm shadow-sm">{{equipment}}</span>
+                                {% endfor %}
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Modal footer -->
+                <div class="flex justify-between items-center p-6 border-t sticky bottom-0 bg-white">
+                    <button onclick="closeModal('modal-{{ salle.id }}')" 
+                            class="px-5 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                        Close
+                    </button>
+                    <a href="/reservation/set-time/{{ salle.id }}" class="px-5 py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        Book Now
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    function openModal(modalId) {
+        document.getElementById(modalId).classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+    }
+    
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+    }
+    
+    
+</script>
+
+    {% elif  set_navigation == "timeing" %}
+    
+
+    </div>
+
+    <div class=" container mx-auto p-6">
+        <div class="max-w-4xl mx-auto">
+            <div class="flex items-center mb-6">
+                <button class="text-blue-600 hover:text-blue-800 mr-4">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                </button>
+                <h2 class="text-3xl font-bold text-gray-800"> Les détails sur la commande</h2>
+            </div>
+
+            <!-- Selected Bag Display -->
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
+                <div class="flex justify-between items-center mt-2">
+                <h3 class="text-xl font-semibold text-blue-800">Selected {{salle_reserve.name}}</h3>
+                    <span class="text-lg font-bold text-green-600">{{prix}} DH</span>
+                </div>
+            </div>
+
+            <!-- Time Schedule Section -->
+
+            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+    {% if s == 0  %}
+                <h3 class="text-xl font-bold mb-4 text-gray-800">Service Schedule</h3>
+                <form class="space-y-4 "  action = {% url 'go_to_service_equipment'  %} method="post">
+                 {% csrf_token %}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="timeFrom"   class="block text-sm font-medium text-gray-700 mb-2">From Time</label>
+                        <input type="datetime-local"  value={{input_form}} ""  id="timeFrom" name= "date_debut" class="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label for="timeTo" class="block text-sm font-medium text-gray-700 mb-2">To Time</label>
+                        <input type="datetime-local"  value={{input_to}} ""  id="timeTo" name= "date_fin" class="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                </div>
+                {% if error.time %}
+                <p class = "text-red-800 "> {{error.time}} </p>
+                {% endif %}
+                <div class="mt-6 p-3  pt-7 py-4">
+                    <a href = {% url 'go_to_menu_init'  %}>
+                     <button type= "button" class="bg-red-400 hover:bg-red-500 text-white py-2  w-1/5 rounded transition-colors">
+                        Back
+                    </button>
+                    </a>
+                    <button type= "submit" class="bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 w-1/5 rounded transition-colors">
+                        next
+                    </button>
+                </div>
+    
+                </form>
+                    {% else %}
+
+                <h3 class="text-xl font-bold  text-gray-800 mb-6">équipement et des services supplémentaires</h3>
+    <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                
+                <button  onclick="openEquipment()" class="bg-[#7876c0] hover:bg-yellow-600 text-white px-4 py-2 rounded transition-colors">
+                        Add  Equipment
+                    </button>
+                    <button   onclick="openService()"  class="bg-[#9d76c0] hover:bg-emerald-600 text-white px-4 py-2 rounded transition-colors">
+                        Add Services
+                    </button>
+                </div>
+                
+                <div class="mt-4 space-y-4">
+                <h3 class="text-s font-bold  text-gray-800 mb-6">equipments </h3>
+
+                    {% for equipment_reserve in equipments_reserve  %}
+                                 <span id="badge-dismiss-yellow" class="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-yellow-800 bg-yellow-100 rounded-sm dark:bg-yellow-900 dark:text-yellow-300">
+                                {{equipment_reserve.name}}   quantity : {{equipment_reserve.que}} 
+                                <a href="{% url 'delete_equipment' forloop.counter %}">
+                                <button type="button" class="inline-flex items-center p-1 ms-2 text-sm text-yellow-400 bg-transparent rounded-xs hover:bg-yellow-200 hover:text-yellow-900 dark:hover:bg-yellow-800 dark:hover:text-yellow-300" data-dismiss-target="#badge-dismiss-yellow" aria-label="Remove">
+                                <svg class="w-2 h-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                </svg>
+                                <span class="sr-only">Remove badge</span>
+                                </button>
+                                </a>
+                                </span>
+                    
+                    {% endfor %}
+                    <div class="mt-4 space-y-4">
+                <h3 class="text-s font-bold mb-4 text-gray-800 mb-6">services </h3>
+
+                    {% for equipment_reserve in services_reserve  %}
+                                 <span id="badge-dismiss-yellow" class="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-sky-800 bg-sky-100 rounded-sm dark:bg-sky-900 dark:text-yellow-300">
+                                {{equipment_reserve.name}}   quantity : {{equipment_reserve.que}} 
+                                <a href="{% url 'delete_service' forloop.counter %}">
+                                <button type="button" class="inline-flex items-center p-1 ms-2 text-sm text-yellow-400 bg-transparent rounded-xs hover:bg-yellow-200 hover:text-yellow-900 dark:hover:bg-yellow-800 dark:hover:text-yellow-300" data-dismiss-target="#badge-dismiss-yellow" aria-label="Remove">
+                                <svg class="w-2 h-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                </svg>
+                                <span class="sr-only">Remove badge</span>
+                                </button>
+                                </a>
+                                </span>
+                    
+                    {% endfor %}
+                  </div>
+                  <hr class="h-px  my-4 bg-gray-200 border-0 dark:bg-gray-700">
+                  <div>
+
+                <a href= {% url 'go_to_timezone'  %}>
+<button     class="bg-red-400 hover:bg-red-500 w-1/5 text-white px-4 py-2 rounded transition-colors">
+                        Back
+                    </button>                
+                </a>
+                <a href= {% url 'go_to_facture'  %}>
+<button     class="bg-sky-500 hover:bg-sky-600 w-1/5 text-white px-4 py-2 rounded transition-colors">
+                        next
+                    </button>                
+                </a>
+                  </div>
+                
+            </div>
+            
+               
+<div id="equipment" class="fixed inset-0 z-50 flex items-center justify-center hidden  bg-black/30 backdrop-blur-sm">
+  <div class="bg-white rounded-lg shadow-xl z-50 w-full max-w-md mx-4 max-h-[90vh] overflow-hidden flex flex-col">
+    <!-- Modal header -->
+    <div class="flex justify-between items-center p-4 border-b sticky top-0 bg-white z-10">
+      <h3 class="text-lg font-semibold text-gray-800">Add Equipment</h3>
+      <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 text-xl transition-colors">
+        &times;
+      </button>
+    </div>
+    
+    <!-- Modal body -->
+    <div class="p-4 overflow-y-auto flex-1">
+      <div class="mb-4 flex justify-between items-center">
+        <h5 class="text-lg font-bold text-gray-900">Available Equipment</h5>
+        <span class="text-sm text-gray-500">{{ equipments|length }} items</span>
+      </div>
+      
+      <div class="border border-gray-200 rounded-lg overflow-hidden">
+        <ul class="divide-y divide-gray-200">
+          {% for equipment in equipments %}
+          <li class="py-3 px-4 hover:bg-gray-50 transition-colors duration-150">
+            <div class="flex items-center justify-between gap-3">
+              <!-- Equipment Info -->
+              <div class="flex items-center flex-1 min-w-0">
+                <div class="shrink-0">
+                  <img class="w-10 h-10 rounded-lg object-cover border border-gray-200" 
+                       src="{{ equipment.photo }}" 
+                       alt="{{ equipment.nom }}"
+                       loading="lazy">
+                </div>
+                <div class="ml-3 min-w-0">
+                  <p class="text-sm font-semibold text-gray-900 truncate">
+                    {{ equipment.nom }}
+                  </p>
+                  <p class="text-xs text-gray-500 truncate">
+                    {{ equipment.categorie }}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Price -->
+              <div class="w-16 text-right">
+                <span class="text-sm font-medium text-gray-900 whitespace-nowrap">
+                  {{ equipment.prix }} DH
+                </span>
+              </div>
+
+              <!-- Quantity Form -->
+              <form action="/reservation/add-equipment/{{equipment.id}}" method="POST" class="flex items-center">
+                {% csrf_token %}
+                <div class="w-16 mr-2">
+                  <input type="number" 
+                         name="equi"
+                         class="w-full h-9 text-sm text-center border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                         placeholder="Qty"
+                         min="1" 
+                         value="1"
+                         required>
+                </div>
+                <button type="submit" 
+                        class="p-2 text-blue-600 hover:text-white hover:bg-blue-600 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                        aria-label="Add equipment">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+                    <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z"/>
+                  </svg>
+                </button>
+              </form>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    
+    <!-- Modal footer -->
+    <div class="p-4 border-t sticky bottom-0 bg-white flex justify-end">
+      <button onclick="closeEquipment()" class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+        Close
+      </button>
+    </div>
+  </div>
+</div>
+    
+    <!-- Modal footer -->    
+  </div>
+</div>
+
+
+<script>
+  function openEquipment() {
+    document.getElementById('equipment').classList.remove('hidden');
+  }
+  
+  function closeEquipment() {
+    document.getElementById('equipment').classList.add('hidden');
+  }
+</script>
+
+
+<div id="service" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black/30 backdrop-blur-sm">
+  <div class="bg-white rounded-lg shadow-xl z-50 w-full max-w-md mx-4 max-h-[90vh] overflow-hidden flex flex-col">
+    <!-- Modal header -->
+    <div class="flex justify-between items-center p-4 border-b sticky top-0 bg-white z-10">
+      <h3 class="text-lg font-semibold text-gray-800">Add Services</h3>
+      <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 text-xl transition-colors">
+        &times;
+      </button>
+    </div>
+    
+    <!-- Modal body -->
+    <div class="p-4 overflow-y-auto flex-1">
+      <div class="mb-4 flex justify-between items-center">
+        <h5 class="text-lg font-bold text-gray-900">Available services</h5>
+        <span class="text-sm text-gray-500">{{ services|length }} items</span>
+      </div>
+      
+      <div class="border border-gray-200 rounded-lg overflow-hidden">
+        <ul class="divide-y divide-gray-200">
+          {% for equipment in services %}
+          <li class="py-3 px-4 hover:bg-gray-50 transition-colors duration-150">
+            <div class="flex items-center justify-between gap-3">
+              <!-- Equipment Info -->
+              <div class="flex items-center flex-1 min-w-0">
+                
+                <div class="ml-3 min-w-0">
+                  <p class="text-sm font-semibold text-gray-900 truncate">
+                    {{ equipment.nom }}
+                  </p>
+                  <p class="text-xs text-gray-500 truncate">
+                    {{ equipment.categorie }}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Price -->
+              <div class="w-16 text-right">
+                <span class="text-sm font-medium text-gray-900 whitespace-nowrap">
+                  {{ equipment.prix }} DH
+                </span>
+              </div>
+
+              <!-- Quantity Form -->
+              <form action="/reservation/add-service/{{equipment.id}}" method="POST" class="flex items-center">
+                {% csrf_token %}
+                
+                <button type="submit" 
+                        class="p-2 text-blue-600 hover:text-white hover:bg-blue-600 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                        aria-label="Add Servise">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+                    <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z"/>
+                  </svg>
+                </button>
+              </form>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    
+    <!-- Modal footer -->
+    <div class="p-4 border-t sticky bottom-0 bg-white flex justify-end">
+      <button onclick="closeService()" class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+        Close
+      </button>
+    </div>
+  </div>
+</div>
+    
+
+
+
+<script>
+  function openService() {
+    document.getElementById('service').classList.remove('hidden');
+  }
+  
+  function closeService() {
+    document.getElementById('service').classList.add('hidden');
+  }
+</script>
+
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Equipment Selection -->
+                
+
+                <!-- Integrated Services -->
+               
+            </div>
+                {% endif %}
+
+{% else %}
+            <!-- Pricing Summary with 3 Taxes -->
+            <div class = "flex w-full justify-center">
+               <div class = "w-2/3">
+             <div class="bg-white rounded-lg shadow-md p-6 mt-8 ">
+             <div class="flex items-center mb-6">
+                <button class="text-blue-600 hover:text-blue-800 mr-4">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                </button>
+                <h2 class="text-3xl font-bold text-gray-800"> La factur de la commande</h2>
+            </div>
+            <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
+
+                <h3 class="text-xl font-bold mb-4 text-gray-800">facture</h3> 
+               <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <span>Subtotal:</span>
+                        <span class="font-medium">{{prix}} DHS</span>
+                    </div>
+                    <div class="flex justify-between text-sm text-gray-600">
+                        <span> salle:</span>
+                        <span>{{prix_salle}} DH</span>
+                    </div>
+                        <div class="flex justify-between text-sm text-gray-600">
+                        <span> equipment:</span>
+                        <span>{{prix_equipments}} DH</span>
+                    </div>
+                        <div class="flex justify-between text-sm text-gray-600">
+                        <span> services:</span>
+                        <span>{{prix_service}} DH</span>
+                    </div>
+                    <div class="flex justify-between text-sm text-gray-600">
+                        <span>Sales Tax (38%):</span>
+                        <span>{{tva}} DH</span>
+                    </div>
+                   
+                  <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
+
+                    <div class="flex justify-between text-xl font-bold">
+                        <span>Total:</span>
+                        <span class="text-green-600">{{total}} DH</span>
+                    </div>
+                </div> 
+                
+               <div class="mt-6  flex mx-4 justify-between  w-52 ">
+                    <a href = {% url 'go_to_menu_init' %}>
+                    <button class="w-full bg-red-400 hover:bg-red-500 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                        cancel
+                    </button>
+                    </a>
+               <a href ={% url "updoade_billet" %}>
+                    <button class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                        Confirm 
+                    </button>
+               </a>
+                </div> 
+            </div> 
+        </div>
+    </div>
+    </div>
+    </div>
+            </div>
+    {% endif %}
+{% endblock %}
